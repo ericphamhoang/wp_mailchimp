@@ -1,10 +1,5 @@
 <?php
 
-//register mailchimp
-require_once plugin_dir_path(__FILE__) . '../vendor/autoload.php';
-
-use \DrewM\MailChimp\MailChimp;
-
 /**
  * Register all actions and filters for the plugin
  *
@@ -134,38 +129,6 @@ class Wp_mailchimp_Loader
         foreach ($this->actions as $hook) {
             add_action($hook['hook'], array($hook['component'], $hook['callback']), $hook['priority'], $hook['accepted_args']);
         }
-
-
-        function subscribe()
-        {
-
-            $MailChimp = new MailChimp('579b52d16c44f196d2656dfa9914fcee-us9');
-
-            //d91e8f6c31
-            $list_id = $_REQUEST['list_id'];
-            $email_address = $_REQUEST['email_address'];
-
-            $result = $MailChimp->post("lists/$list_id/members", [
-                'email_address' => $email_address,
-                'status' => 'subscribed'
-            ]);
-
-            header('content-type:json');
-            print_r(json_encode($result));
-
-//            $result = $MailChimp->get('lists');
-//
-//            header('content-type:json');
-//
-//            print_r(json_encode($result));
-
-            die;
-
-        }
-
-        add_action('wp_ajax_mailchimp_subscribe', 'subscribe');
-        add_action('wp_ajax_nopriv_mailchimp_subscribe', 'subscribe');
-
     }
 
 }
